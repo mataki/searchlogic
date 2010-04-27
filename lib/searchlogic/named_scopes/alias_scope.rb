@@ -32,7 +32,7 @@ module Searchlogic
       # This feels better, it feels like our other scopes, and it provides a way to tell Searchlogic that this
       # is a safe method.
       def alias_scope(name, options = nil)
-        alias_scopes[name.to_sym] = options
+        alias_scopes[name] = options
         (class << self; self end).instance_eval do
           define_method name do |*args|
             case options
@@ -47,12 +47,12 @@ module Searchlogic
       alias_method :scope_procedure, :alias_scope
       
       def alias_scopes # :nodoc:
-        @alias_scopes ||= {}
+        @alias_scopes ||= {}.with_indifferent_access
       end
       
       def alias_scope?(name) # :nodoc:
         return false if name.blank?
-        alias_scopes.key?(name.to_sym)
+        alias_scopes.key?(name)
       end
       
       def condition?(name) # :nodoc:
@@ -60,7 +60,7 @@ module Searchlogic
       end
       
       def named_scope_options(name) # :nodoc:
-        super || alias_scopes[name.to_sym]
+        super || alias_scopes[name]
       end
     end
   end

@@ -60,8 +60,7 @@ module Searchlogic
       private
         def local_condition?(name)
           return false if name.blank?
-          scope_names = scopes.keys.reject { |k| k == :scoped }
-          scope_names.include?(name.to_sym) || !condition_details(name).nil? || boolean_condition?(name)
+          scopes.reject { |k,v| k == :scoped }.with_indifferent_access.key?(name) || !condition_details(name).nil? || boolean_condition?(name)
         end
         
         def boolean_condition?(name)

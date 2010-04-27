@@ -31,4 +31,10 @@ describe Searchlogic::NamedScopes::Ordering do
   it "should have priorty to columns over conflicting association columns" do
     Company.ascend_by_users_count
   end
+  
+  it "should not raise error when order scope is include \\0" do
+    lambda do
+      User.order("\0").all
+    end.should_not raise_error
+  end
 end
